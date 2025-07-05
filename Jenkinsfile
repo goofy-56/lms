@@ -5,7 +5,7 @@ pipeline {
             steps {
                 echo 'CODE QUALITY CHECK'
                 // Below command works in jenkins 
-                sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http://13.233.206.79:9000" -v ".:/usr/src" -e SONAR_TOKEN="sqp_19b8da1cef12a5dafe98448695da586bfce3e178" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+                sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http://13.233.12.153:9000" -v ".:/usr/src" -e SONAR_TOKEN="sqp_cd458d1dfffe0a303dde50fc53ea9d91f5ebb913" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
                 echo 'CODE QUALITY COMPLETED'
             }
         }
@@ -23,7 +23,7 @@ pipeline {
                    def packageJSONVersion = packageJson.version
                    echo "${packageJSONVersion}"
                    sh "zip webapp/lms-${packageJSONVersion}.zip -r webapp/dist"
-                   sh "curl -v -u admin:nexus@123456 --upload-file webapp/lms-${packageJSONVersion}.zip http://13.233.206.79:8081/repository/lms/"
+                   sh "curl -v -u admin:nexus@123456 --upload-file webapp/lms-${packageJSONVersion}.zip http://13.233.12.153:8081/repository/lms/"
                }
            }
 
@@ -34,7 +34,7 @@ pipeline {
                    def packageJson = readJSON file: 'webapp/package.json'
                    def packageJSONVersion = packageJson.version
                    echo "${packageJSONVersion}"
-                   sh "curl -u admin:nexus@123456 -X GET \'http://13.233.206.79:8081/repository/lms/lms-${packageJSONVersion}.zip\' --output lms-'${packageJSONVersion}'.zip"
+                   sh "curl -u admin:nexus@123456 -X GET \'http://13.233.12.153:8081/repository/lms/lms-${packageJSONVersion}.zip\' --output lms-'${packageJSONVersion}'.zip"
                    sh 'sudo rm -rf /var/www/html/*'
                    sh "sudo unzip -o lms-'${packageJSONVersion}'.zip"
                    sh "sudo cp -r webapp/dist/* /var/www/html"
